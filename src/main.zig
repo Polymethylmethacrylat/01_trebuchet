@@ -7,6 +7,33 @@ const print = std.debug.print;
 pub fn main() !void {
 }
 
+const Algo = struct {
+    const Self = @This();
+    // current digit
+    num: ?u8 = null,
+    // sum untill now
+    sum: usize = 0,
+    pub fn feed(self: *Self, char: u8) void {
+        if (char == '\n') {
+            self.sum += self.num.?;
+            self.num = null;
+            return;
+        }
+        if (!(char >= '0' and char <= '9'))
+            return;
+        if (self.num == null) {
+            self.sum += 10 * (char - '0');
+        }
+        self.num = char - '0';
+    }
+    pub fn end(self: *Self) usize {
+        if (self.num) |n| 
+            self.sum += n;
+        self.num = null;
+        return self.sum;
+    }
+};
+
 test "simple test" {
     const file =
         \\1abc2
@@ -15,22 +42,11 @@ test "simple test" {
         \\treb7uchet
         ;
 
-    var num: ?u8 = null;
-    var sum: usize = 0;
-    for (file) |c| {
-        if (c == '\n') {
-            sum += num.? - '0';
-            num = null;
-            continue;
-        }
-        if (!(c >= '0' and c <= '9'))
-            continue;
-        if (num == null) {
-            sum += 10 * (c - '0');
-        }
-        num = c;
-    } else sum += num.? - '0';
+    var algo = Algo{};
 
-    print("{}", .{sum});
+    for (file) |c|
+        algo.feed(c);
+
+    const sum = algo.end();
     try expect(sum == 142);
 }
