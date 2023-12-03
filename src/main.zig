@@ -1,10 +1,18 @@
 const std = @import("std");
-const stdin = std.io.getStdIn().reader();
-const stdout = std.io.getStdOut().writer();
 const expect = std.testing.expect;
 const print = std.debug.print;
 
 pub fn main() !void {
+    const stdin = std.io.getStdIn().reader();
+    const stdout = std.io.getStdOut().writer();
+    var algo = Algo{};
+
+    while (stdin.readByte()) |char| {
+        algo.feed(char);
+    } else |_| { }
+
+    const sum = algo.end();
+    try stdout.print("{}", .{sum});
 }
 
 const Algo = struct {
