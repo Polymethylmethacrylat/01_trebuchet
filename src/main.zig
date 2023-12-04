@@ -1,5 +1,5 @@
 const std = @import("std");
-const expect = std.testing.expect;
+const testing = std.testing;
 const print = std.debug.print;
 
 pub fn main() !void {
@@ -83,7 +83,7 @@ test "simple test" {
         algo.feed(c);
 
     const sum = algo.end();
-    try expect(sum == 142);
+    try testing.expectEqual(sum, 142);
 }
 
 test "complex test" {
@@ -103,5 +103,5 @@ test "complex test" {
         algo.feed(c);
 
     const sum = algo.end();
-    try expect(sum == 281);
+    try testing.expectEqual(sum, 281);
 }
