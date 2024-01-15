@@ -29,21 +29,25 @@ const Algo = struct {
         "eight",
         "nine",
     };
-    // current digit
+    /// current digit
     num: ?u8 = null,
-    // sum untill now
+    /// sum untill now
     sum: usize = 0,
-    // filter index
+    /// filter index
     digit_index: [digits.len]usize = .{0} ** digits.len,
+
     pub fn feed(self: *Self, char: u8) void {
         var c = char;
         inline for (digits, &self.digit_index, 0..) |d, *index, i| {
-            const len = @field(d, "len");
             if (d[index.*] == char) {
                 index.* += 1;
-            } else if (d[0] == char) index.* = 1 else index.* = 0;
-
-            if (index.* >= len) {
+            } else if (d[0] == char) {
+                index.* = 1;
+            } else {
+                index.* = 0;
+                continue;
+            }
+            if (index.* >= d.len) {
                 c = i + '0';
                 index.* = 0;
             }
